@@ -17,6 +17,7 @@ class ConnectionManager {
   }
 
   getPlayer = (index: number, socket: Socket): IPlayer | undefined => {
+    if (!this.connections[index]) return
     return this.connections[index].player_x?.socket === socket ? this.connections[index].player_x : this.connections[index].player_o
   }
 
