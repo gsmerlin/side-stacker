@@ -1,9 +1,9 @@
 import React from 'react'
 import { Buttons, Input } from './style'
 import { Form } from 'react-bootstrap'
-import { useWebsocketEvents } from '../../state/websocket'
-import { useMessageActions } from '../../state/message'
 import Button from '../Button'
+import { useMessageActions } from '../../state/message/hooks'
+import { useWebsocketEvents } from '../../state/websocket/hooks'
 
 const Login: React.FC = () => {
   const websocket = useWebsocketEvents()

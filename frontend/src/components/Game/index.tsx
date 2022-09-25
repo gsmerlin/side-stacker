@@ -1,9 +1,9 @@
 import React from 'react'
-import { useMessageActions } from '../../state/message'
-import { useInGameValue } from '../../state/game'
-import { useWebsocketEvents } from '../../state/websocket'
-import { useUserValue } from '../../state/user'
 import Board from './Board'
+import { useInGameValue } from '../../state/game/hooks'
+import { useMessageActions } from '../../state/message/hooks'
+import { useUserValue } from '../../state/user/hooks'
+import { useWebsocketEvents } from '../../state/websocket/hooks'
 
 const Game: React.FC = () => {
   const username = useUserValue()

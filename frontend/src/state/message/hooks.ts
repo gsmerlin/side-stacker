@@ -1,12 +1,8 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai'
-
-const messageAtom = atom<string>('')
+import { useAtomValue, useSetAtom } from 'jotai'
+import { messageAtom } from './atoms'
+import { MessageActions } from './interface'
 
 export const useMessageValue = (): string => useAtomValue(messageAtom)
-
-interface MessageActions {
-  setMessage: (s: string) => void
-}
 export const useMessageActions = (): MessageActions => {
   const setMessage = useSetAtom(messageAtom)
   return {

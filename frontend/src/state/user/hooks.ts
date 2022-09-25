@@ -1,17 +1,10 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai'
-
-const userAtom = atom<string>('')
-const isLoggedInAtom = atom<boolean>(false)
+import { IUserActions } from './interfaces'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { isLoggedInAtom, userAtom } from './atoms'
 
 export const useUserValue = (): string => useAtomValue(userAtom)
 export const useIsLoggedInValue = (): boolean => useAtomValue(isLoggedInAtom)
-
-interface UserActions {
-  login: (s: string) => void
-  logout: () => void
-}
-
-export const useUserActions = (): UserActions => {
+export const useUserActions = (): IUserActions => {
   const setUser = useSetAtom(userAtom)
   const setIsLoggedIn = useSetAtom(isLoggedInAtom)
   const login = (user): void => {

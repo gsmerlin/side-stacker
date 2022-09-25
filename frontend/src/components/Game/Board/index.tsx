@@ -1,11 +1,11 @@
 import { Col, Container, Figure, Row } from 'react-bootstrap'
-import { useBoardValue, useInGameValue, useTurnValue } from '../../../state/game'
-import { useWebsocketEvents } from '../../../state/websocket'
 import React from 'react'
 import X from '../../../assets/x.png'
 import O from '../../../assets/o.png'
 import Blank from '../../../assets/blank.png'
 import Button from '../../Button/'
+import { useBoardValue, useInGameValue, useTurnValue } from '../../../state/game/hooks'
+import { useWebsocketEvents } from '../../../state/websocket/hooks'
 
 const getColImg = (col): string => {
   if (col.toLowerCase() === 'x') return X

@@ -1,31 +1,15 @@
-import { atom, useAtomValue, useSetAtom } from 'jotai'
-import Blank from '../assets/blank.png'
-import { useMessageActions } from './message'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { blankBoard, boardAtom, inGameAtom, showReplayAtom, turnAtom } from './atoms'
 import { Socket } from 'socket.io-client'
-import { useUserValue } from './user'
-const blankBoard = Array(7)
-  .fill('')
-  .map(() => Array(7).fill(Blank))
-
-const boardAtom = atom<string[][]>(blankBoard)
-const turnAtom = atom<boolean>(false)
-const inGameAtom = atom<boolean>(false)
-const showReplayAtom = atom<boolean>(false)
+import { IGameActions } from './interfaces'
+import { useMessageActions } from '../message/hooks'
+import { useUserValue } from '../user/hooks'
 
 export const useBoardValue = (): string[][] => useAtomValue(boardAtom)
 export const useTurnValue = (): boolean => useAtomValue(turnAtom)
 export const useInGameValue = (): boolean => useAtomValue(inGameAtom)
 export const useShowReplayValue = (): boolean => useAtomValue(showReplayAtom)
-
-interface GameActions {
-  resetGame: (socket: Socket) => void
-  setBoard: (board: string[][]) => void
-  setTurn: (turn: boolean) => void
-  setInGame: (inGame: boolean) => void
-  setShowReplay: (showReplay: boolean) => void
-}
-
-export const useGameActions = (): GameActions => {
+export const useGameActions = (): IGameActions => {
   const setBoard = useSetAtom(boardAtom)
   const username = useUserValue()
   const setTurn = useSetAtom(turnAtom)

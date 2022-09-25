@@ -1,14 +1,11 @@
-import { atom, useAtomValue } from 'jotai'
-import { io, Socket } from 'socket.io-client'
-import { useUserActions, useUserValue } from './user'
-import { useGameActions, useInGameValue } from './game'
-import { useMessageActions } from './message'
-
-const socket = io('http://localhost:4000')
-const websocketAtom = atom<Socket>(socket)
+import { Socket } from 'socket.io-client'
+import { useAtomValue } from 'jotai'
+import { websocketAtom } from './atoms'
+import { useUserActions, useUserValue } from '../user/hooks'
+import { useGameActions, useInGameValue } from '../game/hooks'
+import { useMessageActions } from '../message/hooks'
 
 export const useWebsocket = (): Socket => useAtomValue(websocketAtom)
-
 export const useWebsocketEvents = (): Socket => {
   const websocket = useAtomValue(websocketAtom)
   const username = useUserValue()
@@ -31,9 +28,11 @@ export const useWebsocketEvents = (): Socket => {
 
   websocket.on('board', (payload) => setBoard(payload))
 
-  websocket.on('turn', ({ player, board }: {player: string, board: string[][]}) => {
+  websocket.on('turn', ({ player, board }: { player: string, board: string[][] }) => {
     if (board.length > 0) setBoard(board)
-    if (!inGame) { setInGame(true) }
+    if (!inGame) {
+      setInGame(true)
+    }
     if (player === username) {
       setMessage('Your turn!')
       setTurn(true)
@@ -43,7 +42,7 @@ export const useWebsocketEvents = (): Socket => {
     setTurn(false)
   })
 
-  websocket.on('victory', ({ player, board }: {player: string, board: string[][]}) => {
+  websocket.on('victory', ({ player, board }: { player: string, board: string[][] }) => {
     if (board.length > 0) setBoard(board)
     setMessage(`${player} wins!`)
     setInGame(false)
