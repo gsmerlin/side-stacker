@@ -6,6 +6,7 @@ import Blank from '../../../assets/blank.png'
 import Button from '../../Button/'
 import { useBoardValue, useInGameValue, useTurnValue } from '../../../state/game/hooks'
 import { useWebsocketEvents } from '../../../state/websocket/hooks'
+import { Events } from '../../../enums'
 
 const getColImg = (col): string => {
   if (col.toLowerCase() === 'x') return X
@@ -20,7 +21,7 @@ const Board: React.FC = () => {
   const turn = useTurnValue()
   if (websocket == null) return null
   const buttonHandler = (row, side): void => {
-    websocket.emit('move', { row, side })
+    websocket.emit(Events.Move, { row, side })
   }
   return <Container>
         {board.map((row, rowIndex) => (

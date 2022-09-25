@@ -4,6 +4,7 @@ import { websocketAtom } from './atoms'
 import { useUserActions, useUserValue } from '../user/hooks'
 import { useGameActions, useInGameValue } from '../game/hooks'
 import { useMessageActions } from '../message/hooks'
+import { Events, Messages } from '../../enums'
 
 export const useWebsocket = (): Socket => useAtomValue(websocketAtom)
 export const useWebsocketEvents = (): Socket => {
@@ -14,37 +15,38 @@ export const useWebsocketEvents = (): Socket => {
   const { setMessage } = useMessageActions()
   const { setBoard, setTurn, setInGame, setShowReplay } = useGameActions()
 
-  websocket.on('signup failure', (payload) => setMessage(payload.error))
-  websocket.on('login failure', (payload) => setMessage(payload.error))
-  websocket.on('login success', (user) => {
-    setMessage('')
+  websocket.on(Events.SignupFailure, (payload) => setMessage(payload.error))
+  websocket.on(Events.LoginFailure, (payload) => setMessage(payload.error))
+
+  websocket.on(Events.LoginSuccess, (user) => {
+    setMessage(Messages.Clear)
     login(user)
   })
 
-  websocket.on('signup success', (user) => {
-    setMessage('')
+  websocket.on(Events.SignupSuccess, (user) => {
+    setMessage(Messages.Clear)
     login(user)
   })
 
-  websocket.on('board', (payload) => setBoard(payload))
+  websocket.on(Events.Board, (payload) => setBoard(payload))
 
-  websocket.on('turn', ({ player, board }: { player: string, board: string[][] }) => {
+  websocket.on(Events.Turn, ({ player, board }: { player: string, board: string[][] }) => {
     if (board.length > 0) setBoard(board)
     if (!inGame) {
       setInGame(true)
     }
     if (player === username) {
-      setMessage('Your turn!')
+      setMessage(Messages.YourTurn)
       setTurn(true)
       return
     }
-    setMessage(`${player}'s turn!`)
+    setMessage(Messages.TheirTurn(player))
     setTurn(false)
   })
 
-  websocket.on('victory', ({ player, board }: { player: string, board: string[][] }) => {
+  websocket.on(Events.Victory, ({ player, board }: { player: string, board: string[][] }) => {
     if (board.length > 0) setBoard(board)
-    setMessage(`${player} wins!`)
+    setMessage(Messages.Victory(player))
     setInGame(false)
     setShowReplay(true)
   })

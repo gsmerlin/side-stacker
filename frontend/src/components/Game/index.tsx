@@ -4,6 +4,7 @@ import { useInGameValue } from '../../state/game/hooks'
 import { useMessageActions } from '../../state/message/hooks'
 import { useUserValue } from '../../state/user/hooks'
 import { useWebsocketEvents } from '../../state/websocket/hooks'
+import { Events, Messages } from '../../enums'
 
 const Game: React.FC = () => {
   const username = useUserValue()
@@ -13,8 +14,8 @@ const Game: React.FC = () => {
   React.useEffect(() => {
     console.log({ username })
     if (!inGame) {
-      setMessage('Waiting for opponent...')
-      if (websocket != null && username !== '') { websocket.emit('find game', username) }
+      setMessage(Messages.Waiting)
+      if (websocket != null && username !== '') { websocket.emit(Events.FindGame, username) }
     }
   }, [username])
   if (websocket == null) return null

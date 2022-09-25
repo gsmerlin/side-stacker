@@ -4,6 +4,7 @@ import { Socket } from 'socket.io-client'
 import { IGameActions } from './interfaces'
 import { useMessageActions } from '../message/hooks'
 import { useUserValue } from '../user/hooks'
+import { Events, Messages } from '../../enums'
 
 export const useBoardValue = (): string[][] => useAtomValue(boardAtom)
 export const useTurnValue = (): boolean => useAtomValue(turnAtom)
@@ -23,8 +24,8 @@ export const useGameActions = (): IGameActions => {
       setTurn(false)
       setInGame(false)
       setShowReplay(false)
-      setMessage('Waiting for opponent...')
-      socket.emit('replay', username)
+      setMessage(Messages.Waiting)
+      socket.emit(Events.Replay, username)
     },
     setBoard: (board) => setBoard(board),
     setTurn: (turn) => setTurn(turn),
