@@ -28,7 +28,7 @@ const move = (socket: Socket, manager: ConnectionManager) =>
     if (!data) return
     const { type, payload } = data
     manager.broadcast(index, type, payload)
-    if (type === 'victory') {
+    if (type === Events.Victory) {
       manager.endGame(socket)
     }
   }
