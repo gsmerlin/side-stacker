@@ -11,6 +11,8 @@ export enum Events {
   Replay = 'replay',
   Move = 'move',
   Error = 'error',
+  OpponentLeft = 'opponent left',
+  Waiting = 'waiting'
 }
 
 export const Errors = {

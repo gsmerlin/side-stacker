@@ -1,13 +1,13 @@
 import { Socket } from 'socket.io'
 import Game from '../../Database/Game/model'
 
-interface Player {
+export interface IPlayer {
   socket: Socket
   username: string
 }
 
-export interface GameConnection {
-  player_x?: Player
-  player_o?: Player
+export interface IGameConnection {
+  player_x?: IPlayer
+  player_o?: IPlayer
   game?: Game
 }
