@@ -2,6 +2,7 @@ import { Op } from 'sequelize'
 import User from '../model'
 import Game from '../../Game/model'
 import { IDatabaseOutput, IUserInfo } from '../../interfaces'
+import { Errors } from '../../../enums'
 
 interface IGetUserInfo {
   username: string
@@ -14,7 +15,7 @@ interface IGetUserInfo {
  */
 const getUserInfo = async ({ username }: IGetUserInfo): Promise<IDatabaseOutput<IUserInfo>> => {
   const user = await User.findOne({ where: { username } })
-  if (!user) return { error: new Error('User not found!') }
+  if (!user) return { error: new Error(Errors.User.NotFound) }
   const { createdAt: joined } = user
   const games = await Game.findAll({
     where: {

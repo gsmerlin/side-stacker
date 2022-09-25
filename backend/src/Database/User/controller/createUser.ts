@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt'
 import User from '../model'
 import { IDatabaseOutput } from '../../interfaces'
+import { Errors } from '../../../enums'
 
 interface ICreateUser {
   username: string
@@ -15,7 +16,7 @@ interface ICreateUser {
  */
 const createUser = async ({ username, rawPassword }: ICreateUser): Promise<IDatabaseOutput<User>> => {
   const userAlreadyExists = await User.findOne({ where: { username } })
-  if (userAlreadyExists) return { error: new Error('User already exists!') }
+  if (userAlreadyExists) return { error: new Error(Errors.User.AlreadyExists) }
   const password = await bcrypt.hash(rawPassword, 10)
   const data = await new User({ username, password }).save()
   return { data }
