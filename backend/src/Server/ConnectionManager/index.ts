@@ -10,12 +10,6 @@ class ConnectionManager {
     )
   }
 
-  findConnectionBySocket = (socket: Socket): GameConnection | undefined => {
-    const index = this.findIndexBySocket(socket)
-    if (index === -1) return undefined
-    return this.connections[index]
-  }
-
   findConnectionIndexByUsername = (username: string): number => {
     return this.connections.findIndex((c) => c.player_x?.username === username || c.player_o?.username === username)
   }
