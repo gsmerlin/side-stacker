@@ -1,9 +1,7 @@
 import createGame from './controller/createGame'
-import findOngoingGame from './controller/findOngoingGame'
 
 const gameController = {
-  createGame,
-  findOngoingGame
+  createGame
 }
 
 export default gameController

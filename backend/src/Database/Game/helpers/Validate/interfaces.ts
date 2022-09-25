@@ -1,4 +1,4 @@
-export interface IsValid {
+export interface IIsValid {
   right: boolean
   left: boolean
   up: boolean
@@ -9,7 +9,7 @@ export interface IsValid {
   downLeft: boolean
 }
 
-export interface Counters {
+export interface ICounters {
   right: number
   left: number
   up: number
@@ -20,7 +20,7 @@ export interface Counters {
   downLeft: number
 }
 
-export interface Validations {
+export interface IValidations {
   right: (i: number) => boolean
   left: (i: number) => boolean
   up: (i: number) => boolean
@@ -31,7 +31,7 @@ export interface Validations {
   downLeft: (i: number) => boolean
 }
 
-export interface CheckValue {
+export interface ICheckValue {
   right: (i: number) => boolean
   left: (i: number) => boolean
   up: (i: number) => boolean

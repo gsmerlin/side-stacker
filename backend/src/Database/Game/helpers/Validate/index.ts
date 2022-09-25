@@ -1,12 +1,12 @@
-import { CheckValue, Counters, IsValid, Validations } from './interfaces'
+import { ICheckValue, ICounters, IIsValid, IValidations } from './interfaces'
 
-class Index {
+/**
+ * Class for storing values used for validating different moves in Side-Stacker
+ */
+class Validate {
   row: number
-
   column: number
-
   board: string[][]
-
   symbol: string
 
   constructor (row: number, column: number, board: string[][], symbol: string) {
@@ -16,7 +16,7 @@ class Index {
     this.symbol = symbol
   }
 
-  isValid: IsValid = {
+  isValid: IIsValid = {
     right: true,
     left: true,
     up: true,
@@ -27,7 +27,7 @@ class Index {
     downLeft: true
   }
 
-  counters: Counters = {
+  counters: ICounters = {
     right: 0,
     left: 0,
     up: 0,
@@ -38,7 +38,7 @@ class Index {
     downLeft: 0
   }
 
-  validations: Validations = {
+  validations: IValidations = {
     right: (i: number) => this.column + i < this.board[this.row].length,
     left: (i: number) => this.column - i >= 0,
     up: (i: number) => this.row - i >= 0,
@@ -49,7 +49,7 @@ class Index {
     downLeft: (i: number) => this.validations.down(i) && this.validations.left(i)
   }
 
-  checkValue: CheckValue = {
+  checkValue: ICheckValue = {
     right: (i: number) => this.board[this.row][this.column + i] === this.symbol,
     left: (i: number) => this.board[this.row][this.column - i] === this.symbol,
     up: (i: number) => this.board[this.row - i][this.column] === this.symbol,
@@ -71,4 +71,4 @@ class Index {
   }
 }
 
-export default Index
+export default Validate

@@ -1,17 +1,8 @@
-import {
-  Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt
-} from 'sequelize-typescript'
+import { Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from 'sequelize-typescript'
 import User from '../User/model'
 import Index from './helpers/Validate'
-import { DatabaseOutput } from '../interfaces'
-
-interface GameOutput {
-  type: string
-  payload: {
-    player: string
-    board: string[][]
-  }
-}
+import { IDatabaseOutput } from '../interfaces'
+import { GameOutput } from './interfaces'
 
 @Table
 class Game extends Model {
@@ -49,7 +40,7 @@ class Game extends Model {
 
   getSymbol = (): string => (this.current_player === this.player_x ? 'x' : 'o')
 
-  checkPieceWon = async (row: number, column: number): Promise<DatabaseOutput<GameOutput>> => {
+  checkPieceWon = async (row: number, column: number): Promise<IDatabaseOutput<GameOutput>> => {
     const validator = new Index(row, column, this.board, this.getSymbol())
     for (let i = 1; i < 4; i += 1) {
       validator.validate('right', i)
@@ -93,7 +84,7 @@ class Game extends Model {
     }
   }
 
-  dropPiece = async (row: number, side: string): Promise<DatabaseOutput<GameOutput>> => {
+  dropPiece = async (row: number, side: string): Promise<IDatabaseOutput<GameOutput>> => {
     const line = this.board[row]
     if (side === 'R') line.reverse()
     const openIndex = line.findIndex((move) => move === '')
