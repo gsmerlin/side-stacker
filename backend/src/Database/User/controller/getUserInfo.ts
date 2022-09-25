@@ -1,13 +1,18 @@
 import { Op } from 'sequelize'
 import User from '../model'
 import Game from '../../Game/model'
-import { DatabaseOutput, UserInfo } from '../../interfaces'
+import { IDatabaseOutput, IUserInfo } from '../../interfaces'
 
-interface GetUserInfo {
+interface IGetUserInfo {
   username: string
 }
 
-const getUserInfo = async ({ username }: GetUserInfo): Promise<DatabaseOutput<UserInfo>> => {
+/**
+ * Returns a formatted User info for showing relevant user statistics
+ * @param username - User to find values for
+ * @returns {IUserInfo} - When successful, otherwise an error
+ */
+const getUserInfo = async ({ username }: IGetUserInfo): Promise<IDatabaseOutput<IUserInfo>> => {
   const user = await User.findOne({ where: { username } })
   if (!user) return { error: new Error('User not found!') }
   const { createdAt: joined } = user

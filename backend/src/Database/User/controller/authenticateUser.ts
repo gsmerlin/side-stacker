@@ -1,16 +1,22 @@
 import bcrypt from 'bcrypt'
-import { DatabaseOutput } from '../../interfaces'
+import { IDatabaseOutput } from '../../interfaces'
 import User from '../model'
 
-interface AuthenticateUser {
+interface IAuthenticateUser {
   username: string
   rawPassword: string
 }
 
+/**
+ * Logs user into the side-stacker game
+ * @param username - Username to log in
+ * @param rawPassword - Raw password string to match against encrypted password
+ * @returns {User} - When found, otherwise returns an error
+ */
 const authenticateUser = async ({
   username,
   rawPassword
-}: AuthenticateUser): Promise<DatabaseOutput<User>> => {
+}: IAuthenticateUser): Promise<IDatabaseOutput<User>> => {
   const data = await User.findOne({ where: { username } })
   if (!data) return { error: new Error('Username not found!') }
   if (!await bcrypt.compare(rawPassword, data.password)) return { error: new Error('Wrong password!') }
