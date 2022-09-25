@@ -11,7 +11,8 @@ const start = async (): Promise<Sequelize> => {
     database: 'Side-Stacker',
     dialect: 'sqlite',
     storage: path.resolve(`${__dirname}/side-stacker.db`),
-    models: [User, Game]
+    models: [User, Game],
+    logging: false
   })
   await db.sync()
   return db
