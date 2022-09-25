@@ -1,26 +1,36 @@
 import React from 'react'
 import Board from './Board'
-import { useInGameValue } from '../../state/game/hooks'
+import { useGameActions, useInGameValue, useShowReplayValue } from '../../state/game/hooks'
 import { useMessageActions } from '../../state/message/hooks'
 import { useUserValue } from '../../state/user/hooks'
-import { useWebsocketEvents } from '../../state/websocket/hooks'
+import { useWebsocket } from '../../state/websocket/hooks'
 import { Events, Messages } from '../../enums'
+import { Container } from 'react-bootstrap'
+import Message from '../Message'
+import Button from '../Button'
 
 const Game: React.FC = () => {
   const username = useUserValue()
   const inGame = useInGameValue()
   const { setMessage } = useMessageActions()
-  const websocket = useWebsocketEvents()
+  const websocket = useWebsocket()
+  const showReplay = useShowReplayValue()
+  const { resetGame } = useGameActions()
+  const playAgainHandler = (): void => resetGame(websocket)
   React.useEffect(() => {
-    console.log({ username })
     if (!inGame) {
       setMessage(Messages.Waiting)
       if (websocket != null && username !== '') { websocket.emit(Events.FindGame, username) }
     }
   }, [username])
   if (websocket == null) return null
+
   return (
-      <Board />
+      <Container className='text-center'>
+        <Board />
+        <Message />
+        {showReplay && <Button center={true} onClick={playAgainHandler}>Play again?</Button>}
+      </Container>
   )
 }
 

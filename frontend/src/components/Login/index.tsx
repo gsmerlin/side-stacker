@@ -3,11 +3,12 @@ import { Buttons, Input } from './style'
 import { Form } from 'react-bootstrap'
 import Button from '../Button'
 import { useMessageActions } from '../../state/message/hooks'
-import { useWebsocketEvents } from '../../state/websocket/hooks'
+import { useWebsocket } from '../../state/websocket/hooks'
 import { Events, Messages } from '../../enums'
+import Message from '../Message'
 
 const Login: React.FC = () => {
-  const websocket = useWebsocketEvents()
+  const websocket = useWebsocket()
   const [username, setUsername] = React.useState('')
   const [password, setPassword] = React.useState('')
   const { setMessage } = useMessageActions()
@@ -25,6 +26,7 @@ const Login: React.FC = () => {
               <Button center={true} onClick={() => handleButton(Events.Login)}>Login</Button>
               <Button center={true} onClick={() => handleButton(Events.Signup)}>Create Account</Button>
             </Buttons>
+            <Message />
         </Form >
   )
 }

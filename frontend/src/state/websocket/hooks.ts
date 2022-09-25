@@ -6,8 +6,7 @@ import { useGameActions, useInGameValue } from '../game/hooks'
 import { useMessageActions } from '../message/hooks'
 import { Events, Messages } from '../../enums'
 
-export const useWebsocket = (): Socket => useAtomValue(websocketAtom)
-export const useWebsocketEvents = (): Socket => {
+export const useWebsocket = (): Socket => {
   const websocket = useAtomValue(websocketAtom)
   const username = useUserValue()
   const inGame = useInGameValue()

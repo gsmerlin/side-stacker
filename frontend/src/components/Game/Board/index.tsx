@@ -5,7 +5,7 @@ import O from '../../../assets/o.png'
 import Blank from '../../../assets/blank.png'
 import Button from '../../Button/'
 import { useBoardValue, useInGameValue, useTurnValue } from '../../../state/game/hooks'
-import { useWebsocketEvents } from '../../../state/websocket/hooks'
+import { useWebsocket } from '../../../state/websocket/hooks'
 import { Events } from '../../../enums'
 
 const getColImg = (col): string => {
@@ -16,7 +16,7 @@ const getColImg = (col): string => {
 
 const Board: React.FC = () => {
   const board = useBoardValue()
-  const websocket = useWebsocketEvents()
+  const websocket = useWebsocket()
   const inGame = useInGameValue()
   const turn = useTurnValue()
   if (websocket == null) return null
