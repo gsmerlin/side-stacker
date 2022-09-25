@@ -16,8 +16,8 @@ const move = (socket: Socket, manager: ConnectionManager) =>
     const connection = manager.connections[index] ?? null
     if (!connection || !connection.game) return socket.emit(Events.Error, { error: new Error(Errors.Game.NotFound) })
 
-    const player = manager.getPlayerBySocket(socket)
-    if (connection.game.current_player !== player) {
+    const player = manager.getPlayer(index, socket)
+    if (connection.game.current_player !== player?.username) {
       return socket.emit(Events.Turn, {
         player: connection.game.current_player,
         board: connection.game.board
@@ -27,7 +27,10 @@ const move = (socket: Socket, manager: ConnectionManager) =>
     const { data } = await connection.game.dropPiece(row, side)
     if (!data) return
     const { type, payload } = data
-    return manager.broadcast(index, type, payload)
+    manager.broadcast(index, type, payload)
+    if (type === 'victory') {
+      manager.endGame(socket)
+    }
   }
 
 export default move

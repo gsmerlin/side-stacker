@@ -20,6 +20,11 @@ class ConnectionManager {
     return this.connections[index].player_x?.socket === socket ? this.connections[index].player_x : this.connections[index].player_o
   }
 
+  endGame = (socket: Socket): void => {
+    const index = this.findIndexBySocket(socket)
+    if (index > -1) this.connections.splice(index, 1)
+  }
+
   removePlayerConnection = (socket: Socket): void => {
     const index = this.findIndexBySocket(socket)
     const player = this.getPlayer(index, socket)
