@@ -5,12 +5,12 @@ import Game from './Game/model'
 
 let db: Sequelize | null = null
 
-const start = async (): Promise<Sequelize> => {
+const start = async (storage?: string): Promise<Sequelize> => {
   if (db) return db
   db = await new Sequelize({
     database: 'Side-Stacker',
     dialect: 'sqlite',
-    storage: path.resolve(`${__dirname}/side-stacker.db`),
+    storage: storage ?? path.resolve(`${__dirname}/side-stacker.db`),
     models: [User, Game],
     logging: false
   })
