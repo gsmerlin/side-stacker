@@ -61,6 +61,7 @@ class ConnectionManager {
       return
     }
     const connection = this.connections[index]
+    const isSecondPlayer = (connection.player_x && !connection.player_o) ?? (connection.player_o && !connection.player_x)
     if (!connection.player_x && connection.player_o?.username !== username) {
       connection.player_x = { socket: client, username }
     }
@@ -71,16 +72,18 @@ class ConnectionManager {
       client.emit(Events.Waiting)
       return
     }
-    const { data: game } = await gameController.createGame({
-      playerX: connection.player_x?.username ?? '',
-      playerO: connection.player_o?.username ?? ''
-    })
-    if (game) {
-      connection.game = game
-      this.broadcast(index, Events.Turn, {
-        player: connection.game.current_player,
-        board: connection.game.board
+    if (isSecondPlayer) {
+      const { data: game } = await gameController.createGame({
+        playerX: connection.player_x?.username ?? '',
+        playerO: connection.player_o?.username ?? ''
       })
+      if (game) {
+        connection.game = game
+        this.broadcast(index, Events.Turn, {
+          player: connection.game.current_player,
+          board: connection.game.board
+        })
+      }
     }
   }
 }
