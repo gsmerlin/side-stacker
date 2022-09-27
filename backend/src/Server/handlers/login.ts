@@ -15,7 +15,7 @@ const login = (socket: Socket) =>
     const { data: user, error } = await userController.authenticateUser({ username, rawPassword })
     if (error) return socket.emit(Events.LoginFailure, { error: error.message })
     if (!user) return socket.emit(Events.LoginFailure, { error: new Error(Errors.User.NotFound) })
-    return socket.emit(Events.LoginSuccess, username)
+    return socket.emit(Events.LoginSuccess, user)
   }
 
 export default login

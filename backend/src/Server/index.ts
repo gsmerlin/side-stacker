@@ -8,6 +8,7 @@ import signup from './handlers/signup'
 import findGame from './handlers/findGame'
 import replay from './handlers/replay'
 import move from './handlers/move'
+import profile from './handlers/profile'
 
 const server = createServer()
 const io = new Server(server, {
@@ -29,6 +30,8 @@ io.on(Events.Connection, async (client) => {
   client.on(Events.Replay, replay(client, connectionManager))
 
   client.on(Events.Move, move(client, connectionManager))
+
+  client.on(Events.Profile, profile(client))
 })
 
 export default server

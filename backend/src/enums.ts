@@ -14,7 +14,8 @@ export enum Events {
   OpponentLeft = 'opponent left',
   Waiting = 'waiting',
   Timer = 'timer',
-  Victory = 'victory'
+  Victory = 'victory',
+  Profile = 'profile'
 }
 
 export const Errors = {

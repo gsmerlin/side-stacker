@@ -1,7 +1,8 @@
 import bcrypt from 'bcrypt'
-import { IDatabaseOutput } from '../../interfaces'
+import { IDatabaseOutput, IUserInfo } from '../../interfaces'
 import User from '../model'
 import { Errors } from '../../../enums'
+import getUserInfo from './getUserInfo'
 
 interface IAuthenticateUser {
   username: string
@@ -17,11 +18,13 @@ interface IAuthenticateUser {
 const authenticateUser = async ({
   username,
   rawPassword
-}: IAuthenticateUser): Promise<IDatabaseOutput<User>> => {
+}: IAuthenticateUser): Promise<IDatabaseOutput<IUserInfo>> => {
   const data = await User.findOne({ where: { username } })
   if (!data) return { error: new Error(Errors.User.NotFound) }
   if (!await bcrypt.compare(rawPassword, data.password)) return { error: new Error(Errors.User.WrongPassword) }
-  return { data }
+  const { data: userInfo, error } = await getUserInfo({ username })
+  if (error) return { error }
+  return { data: userInfo }
 }
 
 export default authenticateUser
