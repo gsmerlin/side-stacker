@@ -5,6 +5,41 @@ import { Events } from '../../enums'
 
 class ConnectionManager {
   connections: IGameConnection[] = []
+  TIMEOUT: number = 10000
+
+  startTimer = (socket: Socket): void => this.timer(socket, this.TIMEOUT)
+
+  timer = (socket: Socket, time: number): void => {
+    if (time === 0) return this.timeout(socket)
+    const index = this.findIndexBySocket(socket)
+    const connection = this.connections[index]
+    if (!connection || !connection.game) return
+
+    clearTimeout(connection.timer)
+
+    connection.timer = setTimeout(() => this.timer(socket, time - 1000), 1000)
+
+    this.broadcast(index, Events.Timer, time / 1000)
+  }
+
+  timeout = (socket: Socket): void => {
+    const index = this.findIndexBySocket(socket)
+    const connection = this.connections[index]
+    if (!connection || !connection.game) return
+
+    connection.game.reversePlayer()
+    connection.game.winner = connection.game.current_player
+    void connection.game.save()
+
+    this.broadcast(index, Events.Victory, {
+      player: connection.game.winner,
+      board: connection.game.board
+    })
+
+    this.broadcast(index, Events.Timer, "Time's up!")
+
+    this.endGame(socket)
+  }
 
   findIndexBySocket = (socket: Socket): number => {
     return this.connections.findIndex(
@@ -53,23 +88,23 @@ class ConnectionManager {
     connection.player_o.socket.emit(type, payload)
   }
 
-  findGame = async (client: Socket, username: string): Promise<void> => {
+  findGame = async (socket: Socket, username: string): Promise<void> => {
     const index = this.connections.findIndex((c) => !c.game)
     if (index === -1) {
-      this.connections.push({ player_x: { socket: client, username } })
-      client.emit(Events.Waiting)
+      this.connections.push({ player_x: { socket, username } })
+      socket.emit(Events.Waiting)
       return
     }
     const connection = this.connections[index]
     const isSecondPlayer = (connection.player_x && !connection.player_o) ?? (connection.player_o && !connection.player_x)
     if (!connection.player_x && connection.player_o?.username !== username) {
-      connection.player_x = { socket: client, username }
+      connection.player_x = { socket, username }
     }
     if (!connection.player_o && connection.player_x?.username !== username) {
-      connection.player_o = { socket: client, username }
+      connection.player_o = { socket, username }
     }
     if (!connection.player_o || !connection.player_x) {
-      client.emit(Events.Waiting)
+      socket.emit(Events.Waiting)
       return
     }
     if (isSecondPlayer) {
@@ -79,6 +114,7 @@ class ConnectionManager {
       })
       if (game) {
         connection.game = game
+        this.startTimer(socket)
         this.broadcast(index, Events.Turn, {
           player: connection.game.current_player,
           board: connection.game.board

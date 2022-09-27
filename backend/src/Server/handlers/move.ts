@@ -13,7 +13,7 @@ export interface IMove {
 const move = (socket: Socket, manager: ConnectionManager) =>
   async ({ row, side }: IMove) => {
     const index = manager.findIndexBySocket(socket)
-    const connection = manager.connections[index] ?? null
+    const connection = manager.connections[index]
     if (!connection || !connection.game) return socket.emit(Events.Error, { error: new Error(Errors.Game.NotFound) })
 
     const player = manager.getPlayer(index, socket)
@@ -27,6 +27,7 @@ const move = (socket: Socket, manager: ConnectionManager) =>
     const { data } = await connection.game.dropPiece(row, side)
     if (!data) return
     const { type, payload } = data
+    manager.startTimer(socket)
     manager.broadcast(index, type, payload)
     if (type === Events.Victory) {
       manager.endGame(socket)

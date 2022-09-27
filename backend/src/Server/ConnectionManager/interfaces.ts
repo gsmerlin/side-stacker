@@ -10,4 +10,5 @@ export interface IGameConnection {
   player_x?: IPlayer
   player_o?: IPlayer
   game?: Game
+  timer?: NodeJS.Timeout
 }
