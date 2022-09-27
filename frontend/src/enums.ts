@@ -11,6 +11,8 @@ export enum Events {
   Move = 'move',
   Replay = 'replay',
   Victory = 'victory',
+  Profile = 'profile',
+  Timer = 'timer'
 }
 
 export const Messages = {

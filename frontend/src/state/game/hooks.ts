@@ -6,13 +6,16 @@ import { useMessageActions } from '../message/hooks'
 import { useUserValue } from '../user/hooks'
 import { Events, Messages } from '../../enums'
 
+// Getter hooks
 export const useBoardValue = (): string[][] => useAtomValue(boardAtom)
 export const useTurnValue = (): boolean => useAtomValue(turnAtom)
 export const useInGameValue = (): boolean => useAtomValue(inGameAtom)
 export const useShowReplayValue = (): boolean => useAtomValue(showReplayAtom)
+
+// Setter hooks
 export const useGameActions = (): IGameActions => {
   const setBoard = useSetAtom(boardAtom)
-  const username = useUserValue()
+  const { username } = useUserValue()
   const setTurn = useSetAtom(turnAtom)
   const setInGame = useSetAtom(inGameAtom)
   const setShowReplay = useSetAtom(showReplayAtom)
