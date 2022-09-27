@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text } from './style'
 import { useMessageValue } from '../../state/message/hooks'
+import { Text } from '../Text'
 
 const Message: React.FC = () => {
   const message = useMessageValue()

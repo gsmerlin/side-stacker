@@ -8,9 +8,11 @@ import { Events, Messages } from '../../enums'
 import { Container } from 'react-bootstrap'
 import Message from '../Message'
 import Button from '../Button'
+import Profile from '../Profile'
+import Timer from '../Timer'
 
 const Game: React.FC = () => {
-  const username = useUserValue()
+  const { username } = useUserValue()
   const inGame = useInGameValue()
   const { setMessage } = useMessageActions()
   const websocket = useWebsocket()
@@ -27,7 +29,9 @@ const Game: React.FC = () => {
 
   return (
       <Container className='text-center'>
+        <Profile />
         <Board />
+        <Timer />
         <Message />
         {showReplay && <Button center={true} onClick={playAgainHandler}>Play again?</Button>}
       </Container>
